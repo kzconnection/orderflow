@@ -59,24 +59,13 @@ class DataLoader {
     getVolumeSummaryData(x) {
         return [
             x['open time'],
-            parseFloat(x['high']),
-            parseFloat(x['low']),
-            parseFloat(x['high']),
-            parseFloat(x['low']),
-            parseFloat(x['low'])
+            x['candle high low'],
+            x['candle poc'],
+            x['candle CVD'],
+            x['delta'],
+            x['volume']
         ];
     }
-
-    // getVolumeSummaryData(x) {
-    //     return [
-    //         x['open time'],
-    //         x["delta"],
-    //         x["candle buy count"],
-    //         x["candle buy volume"],
-    //         x["candle sell count"],
-    //         x["candle sell volume"]
-    //     ];
-    // }
   }
   
   export { DataLoader };
