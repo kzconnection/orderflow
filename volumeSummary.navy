@@ -10,10 +10,10 @@ draw(ctx) {
     const data = $core.data 
     const view = $core.view
     let config = $core.props.config
-    let height = layout.height / 5
+    let height = layout.height / 6
     var x1, x2, mid, prev = undefined
     let pxStep = layout.pxStep
-    let splitter = pxStep > 5 ? 1 : 0
+    let splitter = pxStep > 6 ? 1 : 0
 
     for (var i = view.i1, n = view.i2; i <= n; i++) {
 
@@ -32,7 +32,7 @@ draw(ctx) {
             continue
         }
 
-        for(let j = 1; j < 6; j++)  {
+        for(let j = 1; j < 7; j++)  {
             let y = layout.height - height * j;
             ctx.fillStyle = '#ccd6e1ff';
             ctx.fillRect(x, y, width, height);
@@ -41,7 +41,7 @@ draw(ctx) {
             let text = p[j];
             ctx.fillStyle = '#000000ff';
             const metrics = ctx.measureText(text);
-            if(width > metrics.width + 5) {
+            if(width > metrics.width + 6) {
                 console.log(width)
                 ctx.fillText(text, x + width - metrics.width - 5, y + height / 1.5);
             }
@@ -51,16 +51,16 @@ draw(ctx) {
 
 drawSidebar(ctx, side, scale) {
     const layout = $core.layout
-    let height = layout.height / 5
+    let height = layout.height / 6
     let width = layout.width - 2
-    let tableValues = ['H-L', 'POC', 'CVD', 'Delta', 'Volume']
-    for(let j = 1; j < 6; j++)  {
+    let tableValues = ['Duration', 'H-L', 'POC', 'CVD', 'Delta', 'Volume']
+    for(let j = 1; j < 7; j++)  {
         let y = layout.height - height * j;
         ctx.fillStyle = '#ccd6e1ff';
         ctx.fillRect(2, y, width, height);
         let text = tableValues[j-1];
         ctx.fillStyle = '#000000ff';
-        ctx.fillText(text, 5, y + height / 1.5);
+        ctx.fillText(text, 6, y + height / 1.5);
     }
 }
 

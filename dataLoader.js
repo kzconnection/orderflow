@@ -59,6 +59,7 @@ class DataLoader {
     getVolumeSummaryData(x) {
         return [
             x['open time'],
+            x['duration'],
             x['candle high low'],
             x['candle poc'],
             x['candle CVD'],
