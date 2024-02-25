@@ -1,0 +1,67 @@
+[OVERLAY name=Imbalance, ctx=Canvas, version=1.0.0]
+
+prop('color', { type: 'color', def: '#2d7b2f33' }) // (3)
+
+// Draw call
+draw(ctx) { 
+    const layout = $core.layout
+    ctx.fillStyle = $props.color
+    const HPX = -0.5
+    const data = $core.data 
+    const view = $core.view
+    let config = $core.props.config
+    var x1, x2, mid, prev = undefined
+    let { A, B, pxStep } = layout
+    let splitter = pxStep > 5 ? 1 : 0
+    let ls = layout.scaleSpecs.log
+    let fontSize = 12
+    for (var i = view.i1, n = view.i2; i <= n; i++) {
+        let p = data[i]
+
+        //y calculation
+        let h = ls ? Math.floor(math.log(p[1]) * A + B) : Math.floor(p[1] * A + B)
+        let l = ls ? Math.floor(math.log(p[2]) * A + B) : Math.floor(p[2] * A + B)
+        let height = h - l
+        let y = l - 1
+        mid = layout.ti2x(p[0], i) + 1
+
+        //x calculation
+        x1 = prev || Math.floor(mid - pxStep * 0.5)
+        x2 = Math.floor(mid + pxStep * 0.5) + HPX
+        let width = pxStep * config.CANDLEW
+        let x = mid - width/2
+        prev = x2 + splitter
+
+        ctx.beginPath()
+        let elementsCount = p[3].length;
+        let elementHeight = height / elementsCount
+
+        if(Math.abs(elementHeight) < fontSize + 4){
+            ctx.fillStyle = '#ccd6e1ff'
+            ctx.fillRect(x, y, width, height)
+        }
+        else {
+            var imblances = p[3]
+            for(let j = 0; j < imblances.length; j++){
+                let entry = y + elementHeight * j
+                ctx.fillStyle = '#ccd6e1ff'
+                ctx.fillRect(x, entry, width, elementHeight)
+                ctx.strokeStyle = 'rgba(0, 0, 0, 1)'
+                ctx.strokeRect(x, entry, width, elementHeight)
+                ctx.fillStyle = 'rgba(0, 0, 0, 1)'
+                ctx.textAlign = 'center'
+                ctx.textBaseline = 'middle'
+                ctx.font = fontSize + 'px serif'
+                let text = imblances[j][0] + '-' + imblances[j][1]
+                const metrics = ctx.measureText(text)
+                if(width > metrics.width) {
+                    ctx.fillText(text, x + width/2, entry + elementHeight / 2);
+                }
+            }
+        }
+    }
+}
+
+legendHtml(x, prec, f) {
+    return ''
+    }

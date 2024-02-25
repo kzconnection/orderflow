@@ -1,0 +1,71 @@
+[OVERLAY name=VolumeSummary, ctx=Canvas, version=1.0.0]
+
+prop('color', { type: 'color', def: '#2d7b2f33' }) // (3)
+
+// Draw call
+draw(ctx) { 
+    const layout = $core.layout
+    ctx.fillStyle = $props.color
+    const HPX = -0.5
+    const data = $core.data 
+    const view = $core.view
+    let config = $core.props.config
+    let height = layout.height / 5
+    var x1, x2, mid, prev = undefined
+    let pxStep = layout.pxStep
+    let splitter = pxStep > 5 ? 1 : 0
+
+    for (var i = view.i1, n = view.i2; i <= n; i++) {
+
+        let p = data[i]
+        mid = layout.ti2x(p[0], i) + 1
+        x1 = prev || Math.floor(mid - pxStep * 0.5)
+        x2 = Math.floor(mid + pxStep * 0.5) + HPX
+        let width = pxStep * config.CANDLEW
+        let x = mid - width/2
+        prev = x2 + splitter
+        ctx.beginPath()
+
+        if(width < 35) {
+            ctx.fillStyle = '#ccd6e1ff'
+            ctx.fillRect(x, 0, width, layout.height)
+            continue
+        }
+
+        for(let j = 1; j < 6; j++)  {
+            let y = layout.height - height * j;
+            ctx.fillStyle = '#ccd6e1ff';
+            ctx.fillRect(x, y, width, height);
+            ctx.strokeStyle = '#000000ff';
+            ctx.strokeRect(x, y, width, height);
+            let text = p[j];
+            ctx.fillStyle = '#000000ff';
+            const metrics = ctx.measureText(text);
+            if(width > metrics.width + 5) {
+                console.log(width)
+                ctx.fillText(text, x + width - metrics.width - 5, y + height / 1.5);
+            }
+        }
+    }
+}
+
+drawSidebar(ctx, side, scale) {
+    const layout = $core.layout
+    let height = layout.height / 5
+    let width = layout.width - 2
+    let tableValues = ['H-L', 'POC', 'CVD', 'Delta', 'Volume']
+    for(let j = 1; j < 6; j++)  {
+        let y = layout.height - height * j;
+        ctx.fillStyle = '#ccd6e1ff';
+        ctx.fillRect(2, y, width, height);
+        let text = tableValues[j-1];
+        ctx.fillStyle = '#000000ff';
+        ctx.fillText(text, 5, y + height / 1.5);
+    }
+}
+
+legendHtml(x, prec, f) {
+    return ''
+    }
+
+yRange(data, hi, lo) => [500,0,false]
